@@ -32,6 +32,7 @@ ACollidingPawn::ACollidingPawn()
 	PlayerRootCollisionBox->GetBodyInstance()->bLockYTranslation = true;
 	//6
 	SetRootComponent(PlayerRootCollisionBox);
+	PlayerRootCollisionBox->SetEnableGravity(false);
 
 	//MISC
 	//PlayerRootCollisionBox->SetEnableGravity(false);
@@ -89,7 +90,7 @@ void ACollidingPawn::Tick(float DeltaTime)
 	if (MovementUp!= 0)
 	{
 	    //ASSIGN NewLocation to the the sum of the Actors Current Location and the product of the Actors Forward Vector and the MovementForward value i.e GetActorLocation() + (GetActorForwardVector() * MovementForward)
-	    NewLocation = GetActorLocation() + (GetActorForwardVector() * -MovementUp* Speed);
+	    NewLocation = GetActorLocation() + (GetActorUpVector() * MovementUp* Speed);
 	}
 	//ENDIF	
 
