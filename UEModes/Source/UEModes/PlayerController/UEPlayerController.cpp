@@ -4,7 +4,9 @@
 #include "UEPlayerController.h"
 #include "UEModes/Pawn/CollidingPawn.h"
 #include "UEModes/PlayerState/UEPlayerState.h"
-
+#include "UEModes/Actors/Ball.h"
+#include "EngineUtils.h"
+#include <UEModes/Actors/Board.h>
 void AUEPlayerController::OnPossess(APawn* aPawn)
 {
     Super::OnPossess(aPawn);
@@ -23,7 +25,23 @@ void AUEPlayerController::OnUnPossess()
 
     Super::OnUnPossess();
 }
+void AUEPlayerController::BeginPlay()
+{
+    Super::BeginPlay();
+    AActor* MyBoard = nullptr;
+    for (TActorIterator<ABoard> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+    {
+        //CALL AddOnScreenDebugMessage() on GEngine passing in: -1, 15.0f, FColor::Green, "Actor: " + ActorItr->GetName()
+        GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green,
+            "Actor: " + ActorItr->GetName());
 
+        if ((*ActorItr)) {
+            MyBoard = *ActorItr;
+            break;
+        }
+    }
+    SetViewTargetWithBlend(MyBoard, 1.0f, EViewTargetBlendFunction::VTBlend_Cubic);
+}
 void AUEPlayerController::SetupInputComponent()
 {
     Super::SetupInputComponent();

@@ -43,21 +43,21 @@ ACollidingPawn::ACollidingPawn()
 	PawnSpriteComponent->SetupAttachment(RootComponent);
 	PawnSpriteComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
-	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
-	SpringArm->SocketOffset = FVector(0.0f, 0.0f, 300.0f);
-	SpringArm->TargetArmLength = 500.0f;
-	SpringArm->bEnableCameraLag = true;
-	SpringArm->CameraLagSpeed = 10.0f;
-	SpringArm->bDoCollisionTest = false; //Disable Spring Arm Collision
+	//SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraAttachmentArm"));
+	//SpringArm->SetupAttachment(RootComponent);
+	//SpringArm->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	//SpringArm->SocketOffset = FVector(0.0f, 0.0f, 300.0f);
+	//SpringArm->TargetArmLength = 500.0f;
+	//SpringArm->bEnableCameraLag = true;
+	//SpringArm->CameraLagSpeed = 10.0f;
+	//SpringArm->bDoCollisionTest = false; //Disable Spring Arm Collision
 
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>("Pawns Camera");
-	FollowCamera->SetProjectionMode(ECameraProjectionMode::Orthographic);
-	FollowCamera->SetOrthoWidth(5000.0f);
-	FollowCamera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false;
-	
+	//FollowCamera = CreateDefaultSubobject<UCameraComponent>("Pawns Camera");
+	//FollowCamera->SetProjectionMode(ECameraProjectionMode::Orthographic);
+	//FollowCamera->SetOrthoWidth(5000.0f);
+	//FollowCamera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+	//FollowCamera->bUsePawnControlRotation = false;
+	//
 #pragma endregion Hierarchy 2	
 
 	// Don't rotate when the controller rotates.

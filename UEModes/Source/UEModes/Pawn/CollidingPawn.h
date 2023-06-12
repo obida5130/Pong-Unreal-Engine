@@ -19,16 +19,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Pawn Visual")
 		class UPaperSpriteComponent* PawnSpriteComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = "Pawn Camera")
-		class UCameraComponent* FollowCamera;
+	//UPROPERTY(VisibleAnywhere, Category = "Pawn Camera")
+	//	class UCameraComponent* FollowCamera;
 
 	//PART 2
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Custom")
 		class UBoxComponent* PlayerRootCollisionBox;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Custom")
-		class USpringArmComponent* SpringArm;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Custom")
+	//	class USpringArmComponent* SpringArm;
 
 	float Speed;
 
