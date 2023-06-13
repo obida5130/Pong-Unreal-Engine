@@ -6,38 +6,55 @@
 #include "DrawDebugHelpers.h"
 #include "Components/SphereComponent.h"
 #include "PaperSpriteComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 // Sets default values
 ABall::ABall()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	//1
+	////1
+	//CollisionSphere = CreateDefaultSubobject<USphereComponent>("SceneRoot");
+	////2
+	//CollisionSphere->SetSphereRadius(75); //100,10,100
+	////3
+	//CollisionSphere->SetSimulatePhysics(true);
+	////4 - Add a Step and show camera .
+	//CollisionSphere->SetCollisionProfileName("BlockAll");
+	////5	
+	//CollisionSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	////6
+	//CollisionSphere->GetBodyInstance()->bLockXRotation = true;
+	//CollisionSphere->GetBodyInstance()->bLockZRotation = true;
+	//CollisionSphere->GetBodyInstance()->bLockYTranslation = true;
+
+	////
+	//CollisionSphere->SetNotifyRigidBodyCollision(true);
+
+	////7
+	//CollisionSphere->OnComponentHit.AddDynamic(this, &ABall::OnHit);
+	////8
+	//SetRootComponent(CollisionSphere);
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>("SceneRoot");
-	//2
-	CollisionSphere->SetSphereRadius(75); //100,10,100
-	//3
-	CollisionSphere->SetSimulatePhysics(true);
-	//4 - Add a Step and show camera .
-	CollisionSphere->SetCollisionProfileName("BlockAll");
-	//5	
+	CollisionSphere->SetSphereRadius(24.0f); 
 	CollisionSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	//6
-	CollisionSphere->GetBodyInstance()->bLockXRotation = true;
-	CollisionSphere->GetBodyInstance()->bLockZRotation = true;
-	CollisionSphere->GetBodyInstance()->bLockYTranslation = true;
-
-	//
-	CollisionSphere->SetNotifyRigidBodyCollision(true);
-
-	//7
-	CollisionSphere->OnComponentHit.AddDynamic(this, &ABall::OnHit);
-	//8
-	SetRootComponent(CollisionSphere);
+	CollisionSphere->SetCollisionProfileName("BlockAll");
+	RootComponent = CollisionSphere;
 
 	/**  paper sprite component */
 	BallSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Paper Sprite Component"));
 	BallSprite->SetupAttachment(RootComponent);
 	BallSprite->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+
+
+	BallMovementComponent= CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("BallMovementComponent"));
+	BallMovementComponent->ProjectileGravityScale = 0.0f;
+	BallMovementComponent->InitialSpeed = 1000;
+	BallMovementComponent->MaxSpeed = 10000;
+	BallMovementComponent->bShouldBounce = true;
+	BallMovementComponent->Bounciness = 1.1f;
+	BallMovementComponent->Friction = 0;
+
 
 	/** set ball sprite asset */
 	//static ConstructorHelpers::FObjectFinder<UPaperSprite> PaperSpriteTemplate(TEXT("/Game/Sprites/Ball_Sprite"));
@@ -60,6 +77,9 @@ void ABall::BeginPlay()
 // Called every frame
 void ABall::Tick(float DeltaTime)
 {
+	FVector location = GetActorLocation();
+	location.Y = 0.0f;
+	SetActorLocation(location);
 	Super::Tick(DeltaTime);
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), CollisionSphere->GetUnscaledSphereRadius(), 26, FColor::Green, true, -1, 0, 5);
 }
@@ -81,7 +101,7 @@ void ABall::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimit
 	{
 		if (GEngine)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, FString::Printf(TEXT("%s has Hit"), *OtherActor->GetName()));
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, FString::Printf(TEXT("%s has Hit"), *OtherActor->GetName()));
 		}
 	}
 }

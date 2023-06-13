@@ -31,8 +31,8 @@ ACollidingPawn::ACollidingPawn()
 	PlayerRootCollisionBox->GetBodyInstance()->bLockZRotation = true;
 	PlayerRootCollisionBox->GetBodyInstance()->bLockYTranslation = true;
 	//6
-	SetRootComponent(PlayerRootCollisionBox);
 	PlayerRootCollisionBox->SetEnableGravity(false);
+	SetRootComponent(PlayerRootCollisionBox);
 
 	//MISC
 	//PlayerRootCollisionBox->SetEnableGravity(false);
