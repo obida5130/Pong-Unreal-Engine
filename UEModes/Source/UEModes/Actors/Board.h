@@ -23,4 +23,5 @@ public :
 		class UBoxComponent* BottomBox;
 	ABoard();
 
+
 };

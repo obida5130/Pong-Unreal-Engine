@@ -34,10 +34,13 @@ ABall::ABall()
 	//CollisionSphere->OnComponentHit.AddDynamic(this, &ABall::OnHit);
 	////8
 	//SetRootComponent(CollisionSphere);
+
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>("SceneRoot");
 	CollisionSphere->SetSphereRadius(24.0f); 
 	CollisionSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CollisionSphere->SetCollisionProfileName("BlockAll");
+	//CollisionSphere->SetSimulatePhysics(true);
+
 	RootComponent = CollisionSphere;
 
 	/**  paper sprite component */
@@ -56,6 +59,8 @@ ABall::ABall()
 	BallMovementComponent->Friction = 0;
 
 
+	CollisionSphere->OnComponentHit.AddDynamic(this, &ABall::OnHit);
+
 	/** set ball sprite asset */
 	//static ConstructorHelpers::FObjectFinder<UPaperSprite> PaperSpriteTemplate(TEXT("/Game/Sprites/Ball_Sprite"));
 	//if (PaperSpriteTemplate.Succeeded())
@@ -73,16 +78,51 @@ void ABall::BeginPlay()
 	Super::BeginPlay();
 	
 }
-
-// Called every frame
 void ABall::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	FVector location = GetActorLocation();
+	// Define your left and right bounds
+	float leftBound = -1400.0f;
+	float rightBound = 1000.0f;
+
+	// Check if the Ball is out of bounds
+	if (location.X < leftBound || location.X > rightBound)
+	{
+		// Debug message
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Out of bounds, Position: %s, Velocity: %s"), *location.ToString(), *BallMovementComponent->Velocity.ToString()));
+
+		// Reset the Ball's velocity and stop its movement
+		BallMovementComponent->StopMovementImmediately();
+
+		// Reset the Ball's position to the middle of the playing area
+		// Please adjust this to the correct location
+		location.X = -410.620439f;
+		location.Y = 77.314116f;
+		location.Z = 1220.0f;
+		SetActorLocation(location);
+
+		// Schedule a function to restart the ball's movement after a delay
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+			{
+				// This line creates a rotation around the Y axis (vertical axis).
+				FRotator newDirection(0.f, 183.599526f, 0.f);
+				// This line converts the rotation into a direction vector.
+				FVector newVelocity = newDirection.Vector() * 1000.f;
+				BallMovementComponent->Velocity = newVelocity;
+			}, 1.0f, false);
+	}
+
+
 	location.Y = 0.0f;
 	SetActorLocation(location);
-	Super::Tick(DeltaTime);
-	//DrawDebugSphere(GetWorld(), GetActorLocation(), CollisionSphere->GetUnscaledSphereRadius(), 26, FColor::Green, true, -1, 0, 5);
 }
+
+
+
+
 void ABall::Destroyed()
 {
 	Super::Destroyed();
@@ -101,7 +141,7 @@ void ABall::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimit
 	{
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Magenta, FString::Printf(TEXT("%s has Hit"), *OtherActor->GetName()));
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%s has Hit"), *OtherActor->GetName()));
 		}
 	}
 }

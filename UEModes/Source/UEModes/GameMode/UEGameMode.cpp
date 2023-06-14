@@ -4,6 +4,7 @@
 #include "UEGameMode.h"
 #include "EngineUtils.h" //Needed for TActorIterator
 #include "Kismet/GameplayStatics.h"
+
 void AUEGameMode::BeginPlay()
 {
 	Super::BeginPlay();

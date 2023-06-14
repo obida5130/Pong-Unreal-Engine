@@ -15,6 +15,7 @@ class UEMODES_API AUEGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 protected:
+
 	virtual void BeginPlay() override;
 	
 };
