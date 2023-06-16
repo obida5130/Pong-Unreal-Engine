@@ -8,7 +8,6 @@
 #include "Components/BoxComponent.h"
 
 #include "GameFramework/SpringArmComponent.h"
-// A global variable to keep track of the elapsed time
 float GlobalTime = 0.0f;
 
 AEnemyPawn::AEnemyPawn()
@@ -25,6 +24,9 @@ AEnemyPawn::AEnemyPawn()
 	EnemyRootCollisionBox->GetBodyInstance()->bLockYRotation = true;
 	EnemyRootCollisionBox->GetBodyInstance()->bLockZRotation = true;
 	EnemyRootCollisionBox->GetBodyInstance()->bLockYTranslation = true;
+
+
+	EnemyRootCollisionBox->GetBodyInstance()->bLockXTranslation = true;
 	EnemyRootCollisionBox->SetEnableGravity(false);
 
 	SetRootComponent(EnemyRootCollisionBox);

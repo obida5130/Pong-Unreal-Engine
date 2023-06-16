@@ -2,11 +2,12 @@
 
 
 #include "Ball.h"
-
+#include "../GameState/UEGameState.h"
 #include "DrawDebugHelpers.h"
 #include "Components/SphereComponent.h"
 #include "PaperSpriteComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+
 // Sets default values
 ABall::ABall()
 {
@@ -87,34 +88,60 @@ void ABall::Tick(float DeltaTime)
 	float leftBound = -1400.0f;
 	float rightBound = 1000.0f;
 
-	// Check if the Ball is out of bounds
-	if (location.X < leftBound || location.X > rightBound)
+	AUEGameState* gameState = GetWorld()->GetGameState<AUEGameState>();//getting core value from UEGameState
+
+	if (location.X < leftBound)
 	{
-		// Debug message
+
+		gameState->NumberOfRightGoals++;
+
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Out of bounds, Position: %s, Velocity: %s"), *location.ToString(), *BallMovementComponent->Velocity.ToString()));
 
-		// Reset the Ball's velocity and stop its movement
 		BallMovementComponent->StopMovementImmediately();
 
-		// Reset the Ball's position to the middle of the playing area
-		// Please adjust this to the correct location
+
 		location.X = -410.620439f;
 		location.Y = 77.314116f;
 		location.Z = 1220.0f;
 		SetActorLocation(location);
 
-		// Schedule a function to restart the ball's movement after a delay
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
 			{
-				// This line creates a rotation around the Y axis (vertical axis).
 				FRotator newDirection(0.f, 183.599526f, 0.f);
-				// This line converts the rotation into a direction vector.
 				FVector newVelocity = newDirection.Vector() * 1000.f;
 				BallMovementComponent->Velocity = newVelocity;
 			}, 1.0f, false);
-	}
 
+
+	}
+	if (location.X > rightBound)
+	{
+
+		gameState->NumberOfLeftGoals++;
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Out of bounds, Position: %s, Velocity: %s"), *location.ToString(), *BallMovementComponent->Velocity.ToString()));
+
+		BallMovementComponent->StopMovementImmediately();
+
+
+		location.X = -410.620439f;
+		location.Y = 77.314116f;
+		location.Z = 1220.0f;
+		SetActorLocation(location);
+
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+			{
+				FRotator newDirection(0.f, 183.599526f, 0.f);
+				FVector newVelocity = newDirection.Vector() * 1000.f;
+				BallMovementComponent->Velocity = newVelocity;
+			}, 1.0f, false);
+
+
+
+
+	}
 
 	location.Y = 0.0f;
 	SetActorLocation(location);
